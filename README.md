@@ -53,6 +53,8 @@ Collections:
 * `ansible.builtin`
 * `community.general`
 
+If SELinux is in enforcing mode you need another role to set proper context
+
 Example Playbook
 ----------------
 

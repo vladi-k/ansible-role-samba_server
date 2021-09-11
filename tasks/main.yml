@@ -62,5 +62,5 @@
     executable: /bin/bash
   loop: "{{ samba_server_users }}"
   no_log: true
-  register: _-create_user
+  register: __create_user
   changed_when: "'Added user' in __create_user.stdout"

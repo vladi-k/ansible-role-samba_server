@@ -55,7 +55,7 @@ samba_server_conf_homes:
 samba_server_conf_shares: []
 
 samba_server_services:
-  - smb
   - nmb
+  - smb
 
 samba_server_users: []

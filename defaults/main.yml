@@ -59,3 +59,5 @@ samba_server_services:
   - smb
 
 samba_server_users: []
+
+samba_server_enable: true

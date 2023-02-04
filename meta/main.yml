@@ -1,11 +1,14 @@
 ---
 galaxy_info:
-  author: Vladimir Vasilev
+  role_name: samba_server
+  namespace: vladi_k
+  author: Vladimir Vasilev (@vladi-k)
   description: Install and configure Samba server
   license: GPLv3
-  min_ansible_version: 2.9
+  min_ansible_version: "2.10"
   platforms:
-  - name: EL
-    versions:
-    - 8
+    - name: EL
+      versions:
+        - "8"
+        - "9"
 dependencies: []

@@ -7,40 +7,15 @@
 - name: Start smb.conf from scratch
   ansible.builtin.copy:
     dest: /etc/samba/smb.conf
-    content: "{{ samba_server_trunc_header | comment }}"
+    content: "{{ samba_server_empty_conf_header | comment }}"
     owner: root
     mode: '0444'
-  when: samba_server_trunc_conf | bool
+  when: samba_server_empty_conf | bool
   notify:
     - restart samba services
+  tags: crap
 
-- name: Tune smb.conf (global)
-  community.general.ini_file:
-    path: /etc/samba/smb.conf
-    section: global
-    option: "{{ item.option }}"
-    value: "{{ item.value }}"
-    owner: root
-    mode: '0444'
-  loop: "{{ samba_server_conf_global }}"
-  notify:
-    - restart samba services
-
-- name: Tune smb.conf (homes)
-  community.general.ini_file:
-    path: /etc/samba/smb.conf
-    section: homes
-    option: "{{ item.option }}"
-    value: "{{ item.value }}"
-    allow_no_value: true
-    owner: root
-    mode: '0444'
-  loop: "{{ samba_server_conf_homes }}"
-  when: samba_server_homes_enabled | bool
-  notify:
-    - restart samba services
-
-- name: Tune smb.conf (rest)
+- name: Generate smb.conf
   community.general.ini_file:
     path: /etc/samba/smb.conf
     section: "{{ item.0.section }}"
@@ -48,9 +23,10 @@
     value: "{{ item.1.value }}"
     owner: root
     mode: '0444'
-  loop: "{{ query('subelements', samba_server_conf_shares, 'options') }}"
+  loop: "{{ query('subelements', samba_server_smb_conf, 'options') }}"
   notify:
     - restart samba services
+  tags: crap
 
 - name: Create Samba users if they don't exist yet
   ansible.builtin.shell: >

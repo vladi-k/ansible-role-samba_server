@@ -4,55 +4,38 @@ samba_server_packages:
   - samba-common
   - samba-client
 
-samba_server_trunc_conf: false
-samba_server_trunc_header: "This file is managed by Ansible - changes may be lost"
+samba_server_empty_conf: false
+samba_server_empty_conf_header: "This file is managed by Ansible - changes may be lost"
 
-samba_server_workground: WORKGROUP
-
-samba_server_conf_global:
-  - option: netbios name
-    value: "{{ ansible_hostname }}"
-  - option: workgroup
-    value: "{{ samba_server_workground }}"
-  - option: server string
-    value: "{{ ansible_hostname }}"
-  - option: logging
-    value: syslog
-  - option: security
-    value: user
-  - option: passdb backend
-    value: tdbsam
-  - option: map to guest
-    value: never
-  - option: wins support
-    value: 'yes'
-  - option: load printers
-    value: 'no'
-  - option: printing
-    value: bsd
-  - option: printcap name
-    value: /dev/null
-  - option: disable spoolss
-    value: 'yes'
-
-samba_server_homes_enabled: false
-samba_server_conf_homes_valid_users:
-  - '%S'
-samba_server_conf_homes: 
-  - option: comment
-    value: Home Directories
-  - option: browseable
-    value: 'no'
-  - option: read only
-    value: 'no'
-  - option: writable
-    value: 'yes'
-  - option: inherit acls
-    value: 'yes'
-  - option: valid users
-    value: "{{ samba_server_conf_homes_valid_users | join(' ') }}"
-
-samba_server_conf_shares: []
+samba_server_smb_conf:
+  - section: global
+    options:
+      - option: server string
+        value: "{{ ansible_hostname }}"
+      - option: logging
+        value: syslog
+      - option: security
+        value: user
+      - option: passdb backend
+        value: tdbsam
+      - option: load printers
+        value: "no"
+      - option: printing
+        value: bsd
+      - option: printcap name
+        value: /dev/null
+      - option: disable spoolss
+        value: "yes"
+  - section: homes
+    options:
+      - option: comment
+        value: Home Directories
+      - option: browseable
+        value: "no"
+      - option: read only
+        value: "no"
+      - option: valid users
+        value: "%S"
 
 samba_server_services:
   - nmb

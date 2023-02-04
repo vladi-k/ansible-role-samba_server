@@ -13,27 +13,40 @@ Role Variables
 --------------
 
 * `samba_server_packages` - list of packages to install
-* `samba_server_trunc_conf` - boolean to truncate smb.conf
-* `samba_server_trunc_header` - header to set on top of smb.conf when truncated
-* `samba_server_workground` - workgroup name
-* `samba_server_conf_global` - configures [global] section in smb.conf
-* `samba_server_homes_enabled` - boolean to enable [homes] shares in smb.conf
-* `samba_server_conf_homes_valid_users` - list of valid users for home shares
-* `samba_server_conf_homes` - configures [homes] section in smb.conf
-* `samba_server_conf_shares` - list of shares in smb.conf, example:
+* `samba_server_empty_conf` - boolean to empty smb.conf
+* `samba_server_empty_conf_header` - header to set on top of smb.conf when emptied
+* `samba_server_smb_conf` - list to configure smb.conf, example:
 
 ```yaml
-samba_server_conf_shares:
-  - section: movies
+samba_server_smb_conf:
+  - section: global
     options:
-      - option: path
-        value: /mnt/movies
-      - option: browsable
-        value: 'Yes'
-      - option: guest ok
-        value: 'Yes'
+      - option: server string
+        value: "{{ ansible_hostname }}"
+      - option: logging
+        value: syslog
+      - option: security
+        value: user
+      - option: passdb backend
+        value: tdbsam
+      - option: load printers
+        value: "no"
+      - option: printing
+        value: bsd
+      - option: printcap name
+        value: /dev/null
+      - option: disable spoolss
+        value: "yes"
+  - section: homes
+    options:
+      - option: comment
+        value: Home Directories
+      - option: browseable
+        value: "no"
       - option: read only
-        value: 'Yes'
+        value: "no"
+      - option: valid users
+        value: "%S"
 ```
 
 * `samba_server_services` - list of samba systemd services
@@ -53,7 +66,9 @@ Collections:
 * `ansible.builtin`
 * `community.general`
 
-If SELinux is in enforcing mode you need another role to set proper context
+Roles:
+
+* [ansible-role-selinux](https://github.com/vladi-k/ansible-role-selinux) (or similar) if SELinux is in enforcing mode.
 
 Example Playbook
 ----------------
@@ -72,4 +87,4 @@ GPLv3
 Author Information
 ------------------
 
-Vladimir Vasilev
+Vladimir Vasilev (@vladi-k)
